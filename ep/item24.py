@@ -1,5 +1,6 @@
 import threading
 import requests
+import time
 
 
 def get_response(url):
@@ -17,4 +18,19 @@ class RequestThread(threading.Thread):
         self.output = get_response(self._url)
 
 
-print get_response('https://www.google.com')
+start = time.time()
+urls = ['https://www.google.com',
+        'https://www.facebook.com',
+        'https://www.apple.com',
+        'https://www.netflix.com',
+        'https://www.salesforce.com',
+        'https://www.intuit.com',
+        'https://www.amazon.com',
+        'https://www.uber.com',
+        'https://www.lyft.com']
+
+for url in urls:
+    get_response(url)
+
+end = time.time()
+print( "Time taken: %.3f" % (end-start))
