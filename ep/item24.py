@@ -5,7 +5,7 @@ import time
 
 def get_response(url):
     r = requests.get(url)
-    return r.status_code, r.text
+    pass
 
 
 class RequestThread(threading.Thread):
@@ -31,9 +31,11 @@ urls = ['https://www.google.com',
 
 threads = []
 for url in urls:
-    thread = RequestThread(url)
-    thread.start()
+    thread = threading.Thread(get_response(url))
     threads.append(thread)
+
+for thread in threads:
+    thread.start()
 
 for thread in threads:
     thread.join()
