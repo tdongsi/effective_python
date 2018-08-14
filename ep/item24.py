@@ -29,8 +29,9 @@ urls = ['https://www.google.com',
         'https://www.uber.com',
         'https://www.lyft.com']
 
-for url in urls:
-    get_response(url)
+thread = RequestThread('https://www.google.com')
+thread.start()
+thread.join()
 
 end = time.time()
 print( "Time taken: %.3f" % (end-start))
