@@ -89,7 +89,7 @@ for proc in hash_procs:
 
 ###
 # Using timeout for managing long-running subprocess
-proc = subprocess.Popen(['sleep', '10'])
+proc = subprocess.Popen(['sleep', '2'])
 
 # # Python 3 way
 # try:
@@ -106,13 +106,11 @@ class Command(object):
     https://stackoverflow.com/questions/1191374/using-module-subprocess-with-timeout
     """
 
-    def __init__(self, cmd):
-        self.cmd = cmd
-        self.process = None
+    def __init__(self, process):
+        self.process = process
 
     def run(self, timeout):
         def target():
-            self.process = subprocess.Popen(self.cmd, shell=True)
             self.process.communicate()
 
         thread = threading.Thread(target=target)
@@ -126,6 +124,10 @@ class Command(object):
 
         print(self.process.returncode)
 
-command = Command("echo 'Process started'; sleep 2; echo 'Process finished'")
+command = Command(proc)
 command.run(timeout=3)
+
+# NOTE: the following will not work since the subprocess already ran.
+# command = Command(proc)
+command = Command(subprocess.Popen(['sleep', '2']))
 command.run(timeout=1)
