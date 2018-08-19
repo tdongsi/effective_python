@@ -57,13 +57,31 @@ def run_openssl(data):
     proc.stdin.flush()
     return proc
 
-procs = []
+
+def run_md5(input_stdin):
+    proc = subprocess.Popen(
+        ['md5'],
+        stdin=input_stdin,
+        stdout=subprocess.PIPE
+    )
+    return proc
+
+input_procs = []
 for _ in range(5):
     data = os.urandom(100)
     proc = run_openssl(data)
-    procs.append(proc)
+    input_procs.append(proc)
 
-for proc in procs:
+hash_procs = []
+for proc in input_procs:
+    # input of hash subprocess is output of openssl subprocess
+    hash_proc = run_md5(proc.stdout)
+    hash_procs.append(hash_proc)
+
+for proc in input_procs:
+    proc.communicate()
+
+for proc in hash_procs:
     out, _ = proc.communicate()
     print(out)
 
