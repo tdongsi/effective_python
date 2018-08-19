@@ -1,4 +1,5 @@
 import subprocess
+import threading
 import time
 import os
 
@@ -86,3 +87,45 @@ for proc in hash_procs:
     print(out)
 
 
+###
+# Using timeout for managing long-running subprocess
+proc = subprocess.Popen(['sleep', '10'])
+
+# # Python 3 way
+# try:
+#     proc.communicate(timeout=0.1)
+# except subprocess.TimeoutExpired:
+#     proc.terminate()
+#     proc.wait()
+#
+# print('Exit status', proc.poll())
+
+
+class Command(object):
+    """ Stop-gap alternative for subprocess's timeout in Python 3.
+    https://stackoverflow.com/questions/1191374/using-module-subprocess-with-timeout
+    """
+
+    def __init__(self, cmd):
+        self.cmd = cmd
+        self.process = None
+
+    def run(self, timeout):
+        def target():
+            self.process = subprocess.Popen(self.cmd, shell=True)
+            self.process.communicate()
+
+        thread = threading.Thread(target=target)
+        thread.start()
+
+        thread.join(timeout)
+        if thread.is_alive():
+            print 'Terminating process'
+            self.process.terminate()
+            thread.join()
+
+        print(self.process.returncode)
+
+command = Command("echo 'Process started'; sleep 2; echo 'Process finished'")
+command.run(timeout=3)
+command.run(timeout=1)
