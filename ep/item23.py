@@ -11,7 +11,7 @@ proc = subprocess.Popen(
 out, err = proc.communicate()
 print(out.decode('utf-8'))
 
-# Parallelism with subprocess
+# Simple process forking example
 proc = subprocess.Popen(['sleep', '0.3'])
 while proc.poll() is None:
     print('Working...')
@@ -89,9 +89,9 @@ for proc in hash_procs:
 
 ###
 # Using timeout for managing long-running subprocess
-proc = subprocess.Popen(['sleep', '2'])
 
 # # Python 3 way
+# proc = subprocess.Popen(['sleep', '2'])
 # try:
 #     proc.communicate(timeout=0.1)
 # except subprocess.TimeoutExpired:
@@ -124,6 +124,7 @@ class Command(object):
 
         print(self.process.returncode)
 
+proc = subprocess.Popen(['sleep', '2'])
 command = Command(proc)
 command.run(timeout=3)
 
