@@ -1,5 +1,6 @@
 # Stupid version of Insertion Sort for performance profiling
 
+from bisect import bisect_left
 from random import randint
 from cProfile import Profile
 from pstats import Stats
@@ -12,11 +13,8 @@ def insertion_sort(data):
 
 
 def insert_value(array, value):
-    for i, existing in enumerate(array):
-        if existing > value:
-            array.insert(i, value)
-            return
-    array.append(value)
+    i = bisect_left(array, value)
+    array.insert(i, value)
 
 
 max_size = 10**4
@@ -30,3 +28,4 @@ stats = Stats(profiler)
 stats.strip_dirs()
 stats.sort_stats('cumulative')
 stats.print_stats()
+stats.print_callers()
