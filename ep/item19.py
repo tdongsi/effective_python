@@ -120,19 +120,19 @@ class Score(object):
         return self.score * self.weight
 
 
-class GradeList(object):
+class Subject(object):
     """Keeping track of weighted scores for a subject"""
 
     def __init__(self):
-        self._list = []
+        self._grades = []
 
     def add_score(self, score, weight):
-        self._list.append(Score(score, weight))
+        self._grades.append(Score(score, weight))
 
     def subject_avg(self):
-        subject_total = sum(e.weighted_score() for e in self._list)
-        subject_weight = sum(e.weight for e in self._list)
-        return subject_total / subject_weight
+        total = sum(e.weighted_score() for e in self._grades)
+        weight = sum(e.weight for e in self._grades)
+        return total / weight
 
 
 class ClassGradebook(object):
@@ -149,7 +149,7 @@ class ClassGradebook(object):
 
     def report_grade(self, name, subject, score, weight):
         by_subject = self._grade[name]
-        grade_list = by_subject.setdefault(subject, GradeList)
+        grade_list = by_subject.setdefault(subject, Subject)
         grade_list.add_score(score, weight)
 
     def average_grade(self, name):
