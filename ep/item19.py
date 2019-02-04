@@ -1,4 +1,7 @@
 
+from collections import defaultdict
+
+
 class SimpleGradebook(object):
 
     def __init__(self):
@@ -129,10 +132,23 @@ class Subject(object):
     def add_score(self, score, weight):
         self._grades.append(Score(score, weight))
 
-    def subject_avg(self):
+    def average_score(self):
         total = sum(e.weighted_score() for e in self._grades)
         weight = sum(e.weight for e in self._grades)
         return total / weight
+
+
+class Student(object):
+    """Keeping track of subjects for a student"""
+
+    def __init__(self):
+        self._subjects = defaultdict(Subject)
+
+    def average_grade(self):
+        """ Average grade over all subjects"""
+        count = len(self._subjects)
+        total = sum(e.average_score() for e in self._subjects.values())
+        return total / count
 
 
 class ClassGradebook(object):
@@ -142,29 +158,22 @@ class ClassGradebook(object):
     """
 
     def __init__(self):
-        self._grade = {}
+        self._book = {}
 
     def add_student(self, name):
-        self._grade[name] = {}
+        self._book[name] = Student()
 
     def report_grade(self, name, subject, score, weight):
-        by_subject = self._grade[name]
-        grade_list = by_subject.setdefault(subject, Subject)
-        grade_list.add_score(score, weight)
+        student = self._book[name]
+        student._subjects[subject].add_score(score, weight)
 
     def average_grade(self, name):
-        by_subject = self._grade[name]
-        total, count = 0.0, 0
-
-        for subject_grades in by_subject.values():
-            total += subject_grades.subject_avg()
-            count += 1
-
-        return total / count
+        student = self._book[name]
+        return student.average_grade()
 
 
 def main_class():
-    book = WeightedGradebook()
+    book = ClassGradebook()
     book.add_student('Isaac')
 
     book.report_grade('Isaac', 'Math', 90, 0.90)
