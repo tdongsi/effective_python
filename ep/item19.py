@@ -17,7 +17,18 @@ class SimpleGradebook(object):
 
 class BySubjectGradebook(object):
 
-    pass
+    def __init__(self):
+        self._grade = {}
+
+    def add_student(self, name):
+        self._grade[name] = []
+
+    def report_grade(self, name, score):
+        self._grade[name].append(score)
+
+    def average_grade(self, name):
+        grades = self._grade[name]
+        return sum(grades) / len(grades)
 
 
 def main_simple():
