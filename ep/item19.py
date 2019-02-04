@@ -134,18 +134,15 @@ class ClassGradebook(object):
     def report_grade(self, name, subject, score, weight):
         by_subject = self._grade[name]
         grade_list = by_subject.setdefault(subject, [])
-        grade_list.append((score, weight))
+        grade_list.append(Score(score, weight))
 
     def average_grade(self, name):
         by_subject = self._grade[name]
         total, count = 0.0, 0
 
         for grades in by_subject.values():
-            subject_total, subject_weight = 0.0, 0
-            for score, weight in grades:
-                subject_total = score * weight
-                subject_weight = weight
-
+            subject_total = sum(e.weighted_score() for e in grades)
+            subject_weight = sum(e.weight for e in grades)
             total += subject_total / subject_weight
             count += 1
 
@@ -167,4 +164,5 @@ def main_class():
 if __name__ == '__main__':
     # main_simple()
     # main_by_subject()
-    main_weighted()
+    # main_weighted()
+    main_class()
