@@ -168,7 +168,7 @@ class ClassGradebook(object):
 
     def report_grade(self, name, subject, score, weight):
         student = self._book[name]
-        student._subjects[subject].add_score(score, weight)
+        student.subject(subject).add_score(score, weight)
 
     def average_grade(self, name):
         student = self._book[name]
