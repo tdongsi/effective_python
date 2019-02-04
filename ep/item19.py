@@ -144,6 +144,9 @@ class Student(object):
     def __init__(self):
         self._subjects = defaultdict(Subject)
 
+    def subject(self, name):
+        return self._subjects[name]
+
     def average_grade(self):
         """ Average grade over all subjects"""
         count = len(self._subjects)
@@ -158,10 +161,10 @@ class ClassGradebook(object):
     """
 
     def __init__(self):
-        self._book = {}
+        self._book = defaultdict(Student)
 
-    def add_student(self, name):
-        self._book[name] = Student()
+    def student(self, name):
+        return self._book[name]
 
     def report_grade(self, name, subject, score, weight):
         student = self._book[name]
@@ -174,7 +177,6 @@ class ClassGradebook(object):
 
 def main_class():
     book = ClassGradebook()
-    book.add_student('Isaac')
 
     book.report_grade('Isaac', 'Math', 90, 0.90)
     book.report_grade('Isaac', 'Math', 85, 0.10)
@@ -184,8 +186,25 @@ def main_class():
     print(book.average_grade('Isaac'))
 
 
+def main_class_2():
+    """Helper classes help easier to use interface"""
+    book = ClassGradebook()
+
+    isaac = book.student('Isaac')
+    math = isaac.subject('Math')
+    math.add_score(90, 0.90)
+    math.add_score(85, 0.10)
+    gym = isaac.subject('Gym')
+    gym.add_score(95, 0.20)
+    gym.add_score(80, 0.20)
+
+    print(isaac.average_grade())
+    # Equivalent to the old interface
+    print(book.average_grade('Isaac'))
+
+
 if __name__ == '__main__':
     # main_simple()
     # main_by_subject()
     # main_weighted()
-    main_class()
+    main_class_2()
