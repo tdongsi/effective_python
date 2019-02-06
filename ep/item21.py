@@ -1,10 +1,10 @@
 class ApiClass(object):
 
     def __init__(self):
-        self._value = 5
+        self.__value = 5
 
     def get(self):
-        return self._value
+        return self.__value
 
 
 class Child(ApiClass):
