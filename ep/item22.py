@@ -46,6 +46,22 @@ class Worker(object):
     def reduce(self):
         raise NotImplementedError
 
+    @classmethod
+    def create_workers(cls, input_class, config):
+        """ Generic version of create_worker"""
+        workers = []
+        for input_data in input_class.generate_inputs(config):
+            workers.append(cls(input_data))
+        return workers
+
+
+def create_worker(input_list):
+    """ Original version of create_worker"""
+    workers = []
+    for input_data in input_list:
+        workers.append(LineCounter(input_data))
+    return workers
+
 
 class LineCounter(Worker):
     def map(self):
@@ -56,13 +72,6 @@ class LineCounter(Worker):
     def reduce(self, other):
         self.result += other.result
         pass
-
-
-def create_worker(input_list):
-    workers = []
-    for input_data in input_list:
-        workers.append(LineCounter(input_data))
-    return workers
 
 
 def execute(workers):
