@@ -7,6 +7,10 @@ class InputData(object):
     def read(self):
         raise NotImplementedError
 
+    @classmethod
+    def generate_inputs(cls, config):
+        raise NotImplementedError
+
 
 class PathInputData(InputData):
 
@@ -16,6 +20,19 @@ class PathInputData(InputData):
     def read(self):
         with open(self.path, 'rb') as handle:
             return handle.read()
+
+    @classmethod
+    def generate_inputs(cls, config):
+        """ Generic version of generate_inputs"""
+        data_dir = config['data_dir']
+        for name in os.listdir(data_dir):
+            yield cls(os.path.join(data_dir, name))
+
+
+def generate_inputs(data_dir):
+    """ Original version of generate_inputs"""
+    for name in os.listdir(data_dir):
+        yield PathInputData(os.path.join(data_dir, name))
 
 
 class Worker(object):
@@ -39,11 +56,6 @@ class LineCounter(Worker):
     def reduce(self, other):
         self.result += other.result
         pass
-
-
-def generate_inputs(data_dir):
-    for name in os.listdir(data_dir):
-        yield PathInputData(os.path.join(data_dir, name))
 
 
 def create_worker(input_list):
