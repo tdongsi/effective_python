@@ -48,7 +48,12 @@ class Worker(object):
 
     @classmethod
     def create_workers(cls, input_class, config):
-        """ Generic version of create_worker"""
+        """ Generic version of create_worker.
+
+        :param input_class: class that implements InputData interface.
+        :param config: dictionary of configs to be used by InputData.
+        :return:
+        """
         workers = []
         for input_data in input_class.generate_inputs(config):
             workers.append(cls(input_data))
@@ -94,6 +99,11 @@ def mapreduce(data_dir):
     return execute(workers)
 
 
+def mapreduce_generic(worker_class, input_class, config):
+    workers = worker_class.create_workers(input_class, config)
+    return execute(workers)
+
+
 import random
 from backports.tempfile import TemporaryDirectory
 
@@ -106,6 +116,9 @@ def write_test_files(temp_dir):
 
 with TemporaryDirectory() as temp_dir:
     write_test_files(temp_dir)
-    line_count = mapreduce(temp_dir)
+    # line_count = mapreduce(temp_dir)
+
+    config = {'data_dir': temp_dir}
+    line_count = mapreduce_generic(LineCounter, PathInputData, config)
     print line_count
 
