@@ -24,8 +24,27 @@ def sort_priority(numbers, group):
 
 def main_original():
     numbers = NUMBERS[:]
-    print(sort_priority(numbers, GROUP))
+    print(sort_priority_python_2(numbers, GROUP))
     print(numbers)
+
+
+def sort_priority_python_2(numbers, group):
+    """ Sort the input numbers but put those in "group" first.
+
+    :param numbers: list of input numbers.
+    :param group: set of numbers in priority group.
+    :return: True if any number in priority is found.
+    """
+    found = [False]
+
+    def helper(x):
+        if x in group:
+            found[0] = True
+            return (0, x)
+        return (1, x)
+
+    numbers.sort(key=helper)
+    return found[0]
 
 
 if __name__ == '__main__':
