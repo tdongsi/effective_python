@@ -28,6 +28,26 @@ def main_original():
     print(numbers)
 
 
+def sort_priority_python_3(numbers, group):
+    """ Sort the input numbers but put those in "group" first.
+
+    :param numbers: list of input numbers.
+    :param group: set of numbers in priority group.
+    :return: True if any number in priority is found.
+    """
+    found = False
+
+    def helper(x):
+        if x in group:
+            nonlocal found
+            found = True
+            return (0, x)
+        return (1, x)
+
+    numbers.sort(key=helper)
+    return found
+
+
 def sort_priority_python_2(numbers, group):
     """ Sort the input numbers but put those in "group" first.
 
