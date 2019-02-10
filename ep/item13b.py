@@ -67,7 +67,7 @@ def sort_priority_python_2(numbers, group):
     return found[0]
 
 
-class Helper(object):
+class CheckSpecial(object):
 
     def __init__(self, group):
         self.group = group
@@ -81,7 +81,7 @@ class Helper(object):
 
 
 def sort_priority_solved(numbers, group):
-    helper = Helper(GROUP)
+    helper = CheckSpecial(GROUP)
     numbers.sort(key=helper)
     return helper.found
 
