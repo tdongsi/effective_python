@@ -24,7 +24,7 @@ def sort_priority(numbers, group):
 
 def main_original():
     numbers = NUMBERS[:]
-    print(sort_priority_python_2(numbers, GROUP))
+    print(sort_priority_solved(numbers, GROUP))
     print(numbers)
 
 
@@ -39,7 +39,7 @@ def sort_priority_python_3(numbers, group):
 
     def helper(x):
         if x in group:
-            nonlocal found
+            # nonlocal found
             found = True
             return (0, x)
         return (1, x)
@@ -65,6 +65,25 @@ def sort_priority_python_2(numbers, group):
 
     numbers.sort(key=helper)
     return found[0]
+
+
+class Helper(object):
+
+    def __init__(self, group):
+        self.group = group
+        self.found = False
+
+    def __call__(self, x):
+        if x in self.group:
+            self.found = True
+            return (0, x)
+        return (1, x)
+
+
+def sort_priority_solved(numbers, group):
+    helper = Helper(GROUP)
+    numbers.sort(key=helper)
+    return helper.found
 
 
 if __name__ == '__main__':
