@@ -26,9 +26,11 @@ async def make_random(idx: int, threshold: int = 6) -> int:
     print(color[idx+1] + f"---> Finished: make_random({idx}) == {i}" + color[0])
     return i
 
+
 async def main():
     res = await asyncio.gather(*(make_random(i, 10-i-1) for i in range(3)))
     return res
+
 
 if __name__ == '__main__':
     random.seed(444)
