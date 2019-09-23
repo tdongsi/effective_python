@@ -22,7 +22,8 @@ observer_a = Observer_A()
 observer_a.f()
 
 
-# Factory Method pattern
+# Factory Method pattern: create objects of different classes based on an input string
+# Abstract Factory pattern: factory of factories
 class FactoryMethod_A(object):
     att = "Hello"
 
